@@ -20,7 +20,7 @@ router.get('/:id', async(req, response) => {
             if(error){
                 console.log(error.message);
             }
-            if(results){
+            if(results.rows != false){
                 const mainUrl = results.rows[0].mainurl;
                 fetch(mainUrl)
                 .then(res => {
@@ -43,11 +43,11 @@ router.get('/:id', async(req, response) => {
                 
             }
             else{
-            return response.status(404).json({
-                "status": "fail",
-                "desc": "entry doesnt exist",
-            })
-        }
+                return response.status(404).json({
+                    "status": "fail",
+                    "desc": "entry doesnt exist",
+                })
+            }
         })
 
     } catch (err){

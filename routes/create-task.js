@@ -3,6 +3,7 @@ const router = express.Router();
 const validUrl = require('valid-url');
 const pool = require('../config/db.js');
 const dotenv = require("dotenv");
+const {checkStatus} = require('../utils/check-status')
 
 
 dotenv.config();
@@ -10,6 +11,14 @@ dotenv.config();
 router.post('/task', async(req, response) => {
     const { mainUrl } = req.body;
     const {email} = req.body;
+    let site_status;
+    try{
+    site_status = await checkStatus(mainUrl);
+    } catch(err){
+        site_status = false;
+        console.log("Website is down or not exist");
+    }
+
     if(!validUrl.isUri(mainUrl)) {
         return response.status(422).json("Invalid Url");
     }
@@ -28,11 +37,7 @@ router.post('/task', async(req, response) => {
             }
 
             if (results.rows==false){
-                console.log("Here");
-                pool.query('INSERT INTO sites(mainurl, email) VALUES($1, $2)', [mainUrl,email], (error, results) => {
-                    if (error) {
-                        console.log(error.message);
-                    }
+                pool.query('INSERT INTO sites(mainurl, email, status) VALUES($1, $2, $3)', [mainUrl,email, site_status]).then(results => {
                     
                     return response.status(201).json({
                         "status": "success",
@@ -41,11 +46,13 @@ router.post('/task', async(req, response) => {
                     });
                   })
             }
+            else{
             return response.status(403).json({
                 "status": "fail",
                 "desc": "url already added",
-                "data": results.rows
+                "data": results.rows[0]
             });
+        }
           })
         }
 })
