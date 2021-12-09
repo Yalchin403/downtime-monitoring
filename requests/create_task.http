@@ -1,0 +1,7 @@
+POST http://localhost:5000/api/v1/create/task
+Content-Type: application/json
+
+{
+    "mainUrl":"https://yalchin.info",
+    "email":"yalchinmammadli@yalchin.info"
+}

@@ -1,0 +1,14 @@
+version: '3.1'
+
+services:
+
+  db:
+    container_name: 'postgresdb'
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: hacku
+      POSTGRES_PASSWORD: passwordofMyDb-24
+      POSTGRES_DB: monitordb
+    ports:
+      - '5432:5432'

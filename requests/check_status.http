@@ -1,0 +1,2 @@
+GET http://localhost:5000/api/v1/url/check-status/:id
+Content-Type: application/json
