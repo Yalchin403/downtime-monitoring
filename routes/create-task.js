@@ -37,12 +37,12 @@ router.post('/task', async(req, response) => {
             }
 
             if (results.rows==false){
-                pool.query('INSERT INTO sites(mainurl, email, status) VALUES($1, $2, $3)', [mainUrl,email, site_status]).then(results => {
+                pool.query('INSERT INTO sites(mainurl, email, status) VALUES($1, $2, $3) RETURNING *', [mainUrl,email, site_status]).then(results => {
                     
                     return response.status(201).json({
                         "status": "success",
                         "desc": "added the url",
-                        "id": results.insertId
+                        "id": results.rows[0].id
                     });
                   })
             }

@@ -16,6 +16,7 @@ async function main(){
         checkStatus(row.mainurl).then(currentStatus => {
             getStatus(row.id).then(recentStatus => {
                 if (recentStatus != currentStatus){
+                    console.log(recentStatus, currentStatus);
                     if(!currentStatus){
                          // send down email
                         sendEmail(row, "down");
